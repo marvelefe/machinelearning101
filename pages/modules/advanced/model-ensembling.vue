@@ -7,7 +7,7 @@
     module-id="model-ensembling"
     :table-of-contents="tableOfContents"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }"
   >
     <!-- Content Section -->
     <template #content>
@@ -141,8 +141,8 @@
             <div class="grid grid-cols-2 gap-4">
               <ConfusionMatrix
                 v-if="ensembleConfusionMatrix"
-                :matrix="ensembleConfusionMatrix"
-                :labels="['Class 0', 'Class 1']"
+                :confusion-matrix="ensembleConfusionMatrix"
+                :class-labels="['Class 0', 'Class 1']"
                 title="Ensemble Confusion Matrix"
               />
 
@@ -158,7 +158,7 @@
 
             <Scatter2D
               v-if="predictionComparisonViz"
-              :data="predictionComparisonViz"
+              :series="predictionComparisonViz"
               title="Individual vs Ensemble Predictions"
               x-label="Feature 1"
               y-label="Feature 2"

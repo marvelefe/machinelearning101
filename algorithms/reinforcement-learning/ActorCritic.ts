@@ -832,7 +832,7 @@ export class ActorCritic extends BaseAlgorithm {
   /**
    * Reset the algorithm
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.episodeHistory = [];
     this.rewardHistory = [];

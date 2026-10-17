@@ -30,7 +30,9 @@ export interface GANState {
   discriminatorScores: { real: number[]; fake: number[] };
 }
 
-export class GAN extends BaseAlgorithm {
+// GAN generates samples with `predict(numSamples)`, so its fit/predict input
+// types are unrelated; widen the generic input to cover both.
+export class GAN extends BaseAlgorithm<number | number[][], number[], number[][]> {
   name = 'Generative Adversarial Network';
   
   // Network architectures
@@ -633,7 +635,7 @@ export class GAN extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.generatorWeights = [];
     this.discriminatorWeights = [];

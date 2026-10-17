@@ -483,7 +483,7 @@ export class WordEmbeddings extends BaseAlgorithm {
   /**
    * Reset embeddings state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.vocabulary.clear();
     this.wordFrequency.clear();

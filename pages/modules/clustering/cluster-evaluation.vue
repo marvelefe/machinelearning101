@@ -7,7 +7,7 @@
     module-id="cluster-evaluation"
     :table-of-contents="tableOfContents"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }"
   >
     
     <!-- Content Section -->
@@ -173,6 +173,10 @@ import { KMeans } from '~/algorithms/clustering/KMeans';
 import { DBSCAN } from '~/algorithms/clustering/DBSCAN';
 import { GMM } from '~/algorithms/clustering/GMM';
 import { MeanShift } from '~/algorithms/clustering/MeanShift';
+import type { KMeansParams } from '~/algorithms/clustering/KMeans';
+import type { DBSCANParams } from '~/algorithms/clustering/DBSCAN';
+import type { GMMParams } from '~/algorithms/clustering/GMM';
+import type { MeanShiftParams } from '~/algorithms/clustering/MeanShift';
 import Scatter2D from '~/components/visualizations/Scatter2D.vue';
 import type { ControlConfig } from '~/components/modules/ControlPanel.vue';
 import type { Metrics } from '~/types/algorithm';
@@ -339,16 +343,16 @@ const runClusteringAlgorithm = async (X: number[][]): Promise<{ labels: number[]
   
   switch (algorithm) {
     case 'kmeans':
-      clusteringAlgorithm = new KMeans({ k, randomSeed: 42 });
+      clusteringAlgorithm = new KMeans({ k, randomSeed: 42 } as KMeansParams);
       break;
     case 'dbscan':
-      clusteringAlgorithm = new DBSCAN({ eps: 0.5, minPts: 5 });
+      clusteringAlgorithm = new DBSCAN({ eps: 0.5, minPts: 5 } as DBSCANParams);
       break;
     case 'gmm':
-      clusteringAlgorithm = new GMM({ k, randomSeed: 42 });
+      clusteringAlgorithm = new GMM({ k, randomSeed: 42 } as GMMParams);
       break;
     case 'meanshift':
-      clusteringAlgorithm = new MeanShift({ bandwidth: 1.0 });
+      clusteringAlgorithm = new MeanShift({ bandwidth: 1.0 } as MeanShiftParams);
       break;
     default:
       throw new Error(`Unknown algorithm: ${algorithm}`);
@@ -377,7 +381,7 @@ const handleEvaluate = async () => {
     
     // Prepare data
     const X = dataset.map(d => d.features);
-    const trueLabels = parameters.value.withGroundTruth ? dataset.map(d => d.label || 0) : undefined;
+    const trueLabels = parameters.value.withGroundTruth ? dataset.map(d => (d.label as number) || 0) : undefined;
     
     evaluationProgress.value = 0.3;
     

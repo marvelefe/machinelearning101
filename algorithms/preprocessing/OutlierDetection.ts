@@ -558,7 +558,7 @@ export class OutlierDetection extends BaseAlgorithm {
   /**
    * Reset to initial state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.data = [];
     this.cleanedData = [];

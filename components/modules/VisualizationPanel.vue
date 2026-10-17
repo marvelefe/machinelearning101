@@ -162,7 +162,7 @@ const visualizationType = computed(() => {
  * Get visualization component for a given type
  */
 const getVisualizationComponent = (type: VisualizationType) => {
-  const componentMap: Record<VisualizationType, any> = {
+  const componentMap: Partial<Record<VisualizationType, any>> = {
     'scatter2d': defineAsyncComponent(() => import('~/components/visualizations/Scatter2D.vue')),
     'scatter3d': defineAsyncComponent(() => import('~/components/visualizations/Plot3D.vue')),
     'line': defineAsyncComponent(() => import('~/components/visualizations/LineChart.vue')),

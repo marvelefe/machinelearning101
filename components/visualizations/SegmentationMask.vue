@@ -6,7 +6,7 @@
     :config="plotlyConfig"
     :loading="loading"
     :error="error"
-    :height="height"
+    :height="String(height)"
   />
   </ClientOnly>
 </template>

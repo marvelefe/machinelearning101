@@ -1,16 +1,25 @@
 // Visualization type definitions
 
-export type VisualizationType = 
+export type VisualizationType =
   | 'scatter2d'
   | 'scatter3d'
+  | 'scatter'
   | 'line'
+  | 'bar'
+  | 'histogram'
   | 'heatmap'
+  | 'contour'
   | 'surface'
-  | 'canvas-scatter'
+  | 'network'
+  | 'tree'
+  | 'loss-landscape'
+  | 'confusion'
   | 'confusion-matrix'
   | 'roc-curve'
   | 'learning-curves'
-  | 'cross-validation';
+  | 'cross-validation'
+  | 'canvas-scatter'
+  | 'policy';
 
 export interface VisualizationConfig {
   type: VisualizationType;

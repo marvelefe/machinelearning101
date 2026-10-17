@@ -341,7 +341,7 @@ export class LinearRegression extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.weights = [];
     this.bias = 0;

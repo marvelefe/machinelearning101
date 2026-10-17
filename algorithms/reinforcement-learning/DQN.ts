@@ -759,7 +759,7 @@ export class DQN extends BaseAlgorithm {
   /**
    * Reset the algorithm
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.replayBuffer = [];
     this.episodeHistory = [];

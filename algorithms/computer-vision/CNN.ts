@@ -737,7 +737,7 @@ export class CNN extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.convLayer = null;
     this.denseLayer = null;

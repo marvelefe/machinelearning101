@@ -8,7 +8,7 @@
  */
 
 import { useHead, useSeoMeta } from '#app'
-import type { UseSeoMetaInput } from '@unhead/schema'
+import type { UseSeoMetaInput } from '@unhead/vue'
 
 export interface SEOConfig {
   title: string
@@ -91,7 +91,9 @@ export function useSEO(config: SEOConfig) {
     
     // Robots
     ...(config.noindex && { robots: 'noindex, nofollow' }),
-  } as UseSeoMetaInput)
+    // `config.author` is a single string while unhead types `articleAuthor` as
+    // a list; keep the runtime value unchanged.
+  } as unknown as UseSeoMetaInput)
 
   // Set canonical URL and other head elements
   useHead({

@@ -576,7 +576,7 @@ export class SentimentAnalysis extends BaseAlgorithm {
   /**
    * Reset sentiment analyzer state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.vocabulary.clear();
     this.wordWeights = [];

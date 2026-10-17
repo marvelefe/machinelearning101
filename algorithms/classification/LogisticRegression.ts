@@ -41,7 +41,7 @@ export class LogisticRegression extends BaseAlgorithm {
   private shouldNormalize: boolean;
   
   // Training history with accuracy
-  protected trainingHistory: TrainingHistory & { accuracy: number[] } = {
+  protected override trainingHistory: TrainingHistory & { accuracy: number[] } = {
     epochs: [],
     loss: [],
     accuracy: []
@@ -458,7 +458,7 @@ export class LogisticRegression extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.weights = [];
     this.bias = 0;

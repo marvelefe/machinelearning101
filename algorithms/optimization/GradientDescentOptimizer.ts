@@ -165,7 +165,7 @@ export class SGDMomentum extends BaseOptimizer {
     return [...newParams];
   }
   
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.velocity = new Array(this.params.length).fill(0);
   }
@@ -213,7 +213,7 @@ export class RMSProp extends BaseOptimizer {
     return [...newParams];
   }
   
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.squaredGradientAvg = new Array(this.params.length).fill(0);
   }
@@ -283,7 +283,7 @@ export class Adam extends BaseOptimizer {
     return [...newParams];
   }
   
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.firstMoment = new Array(this.params.length).fill(0);
     this.secondMoment = new Array(this.params.length).fill(0);

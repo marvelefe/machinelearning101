@@ -2,7 +2,7 @@
   <ModuleLayout title="Named Entity Recognition" description="Learn how to identify and classify named entities in text"
     difficulty="intermediate" :estimated-time="45" module-id="named-entity-recognition"
     :table-of-contents="tableOfContents" :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }">
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }">
     <!-- Content Section -->
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />

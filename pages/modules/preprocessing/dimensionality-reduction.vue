@@ -6,7 +6,7 @@
     difficulty="advanced"
     :table-of-contents="tableOfContents"
     :parameters="params"
-    @load-bookmark="(val) => { params = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { params = val as typeof params; handleLoadBookmark(val); }"
   >
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />
@@ -354,7 +354,7 @@ const projectionLayout = computed(() => ({
 
 // Event handlers
 const handleParamChange = (key: string, value: any) => {
-  params.value[key as keyof typeof params.value] = value;
+  (params.value as Record<string, any>)[key] = value;
   
   // Ensure nComponents doesn't exceed originalDimensions
   if (key === 'originalDimensions' && params.value.nComponents > value) {

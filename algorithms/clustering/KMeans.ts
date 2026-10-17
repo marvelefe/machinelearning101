@@ -45,7 +45,7 @@ export class KMeans extends BaseAlgorithm {
   
   // Training history with cluster assignments
   private clusterHistory: ClusterHistory[] = [];
-  protected trainingHistory: TrainingHistory & { inertia: number[] } = {
+  protected override trainingHistory: TrainingHistory & { inertia: number[] } = {
     epochs: [],
     loss: [],
     inertia: []
@@ -561,7 +561,7 @@ export class KMeans extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.centroids = [];
     this.assignments = [];

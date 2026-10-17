@@ -39,7 +39,7 @@ export interface TuningParams {
   earlyStoppingPatience?: number;
 }
 
-export class HyperparameterTuning extends BaseAlgorithm {
+export class HyperparameterTuning extends BaseAlgorithm<number[][], number[], HyperparameterConfig> {
   name = 'Hyperparameter Tuning';
   
   // Tuning configuration
@@ -753,7 +753,7 @@ export class HyperparameterTuning extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.X_train = [];
     this.y_train = [];

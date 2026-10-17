@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { setActivePinia, createPinia } from 'pinia';
+import { nextTick } from 'vue';
 import { useProgressStore } from '../stores/progress';
+import { createTestPinia } from './helpers/pinia';
 
 /**
  * Progress Tracking Integration Tests
@@ -17,7 +18,7 @@ describe('Progress Tracking Integration', () => {
 
   beforeEach(() => {
     // Create a fresh pinia instance for each test
-    setActivePinia(createPinia());
+    createTestPinia();
     progressStore = useProgressStore();
     
     // Clear localStorage before each test
@@ -43,13 +44,15 @@ describe('Progress Tracking Integration', () => {
       expect(progressStore.getQuizScore(moduleId)).toBe(score);
     });
 
-    it('should persist quiz score to localStorage', () => {
+    it('should persist quiz score to localStorage', async () => {
       // Arrange
       const moduleId = 'linear-regression';
       const score = 85;
 
       // Act
       progressStore.saveQuizScore(moduleId, score);
+      // Persistence is async (pinia-plugin-persistedstate writes via $subscribe)
+      await nextTick();
 
       // Assert
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -59,24 +62,25 @@ describe('Progress Tracking Integration', () => {
       expect(data.quizScores[moduleId]).toBe(score);
     });
 
-    it('should load persisted quiz score after page reload', () => {
+    it('should load persisted quiz score after page reload', async () => {
       // Arrange
       const moduleId = 'linear-regression';
       const score = 85;
 
       // Act - Save score
       progressStore.saveQuizScore(moduleId, score);
+      await nextTick();
 
-      // Simulate page reload by creating a new store instance
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert
       expect(newStore.quizScores[moduleId]).toBe(score);
       expect(newStore.getQuizScore(moduleId)).toBe(score);
     });
 
-    it('should persist multiple quiz scores', () => {
+    it('should persist multiple quiz scores', async () => {
       // Arrange
       const scores = {
         'linear-regression': 85,
@@ -88,10 +92,11 @@ describe('Progress Tracking Integration', () => {
       Object.entries(scores).forEach(([moduleId, score]) => {
         progressStore.saveQuizScore(moduleId, score);
       });
+      await nextTick();
 
-      // Simulate page reload
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert
       Object.entries(scores).forEach(([moduleId, expectedScore]) => {
@@ -128,7 +133,7 @@ describe('Progress Tracking Integration', () => {
       expect(progressStore.isModuleCompleted(moduleId)).toBe(true);
     });
 
-    it('should persist module completion to localStorage', () => {
+    it('should persist module completion to localStorage', async () => {
       // Arrange
       const moduleId = 'pca';
       const score = 80;
@@ -136,6 +141,7 @@ describe('Progress Tracking Integration', () => {
       // Act
       progressStore.saveQuizScore(moduleId, score);
       progressStore.markModuleComplete(moduleId);
+      await nextTick();
 
       // Assert
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -145,7 +151,7 @@ describe('Progress Tracking Integration', () => {
       expect(data.completedModules).toContain(moduleId);
     });
 
-    it('should load persisted module completion after page reload', () => {
+    it('should load persisted module completion after page reload', async () => {
       // Arrange
       const moduleId = 'gradient-descent';
       const score = 85;
@@ -153,17 +159,18 @@ describe('Progress Tracking Integration', () => {
       // Act - Save score and mark complete
       progressStore.saveQuizScore(moduleId, score);
       progressStore.markModuleComplete(moduleId);
+      await nextTick();
 
-      // Simulate page reload
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert
       expect(newStore.isModuleCompleted(moduleId)).toBe(true);
       expect(newStore.completedModules).toContain(moduleId);
     });
 
-    it('should track multiple completed modules', () => {
+    it('should track multiple completed modules', async () => {
       // Arrange
       const modules = [
         { id: 'linear-regression', score: 85 },
@@ -176,10 +183,11 @@ describe('Progress Tracking Integration', () => {
         progressStore.saveQuizScore(id, score);
         progressStore.markModuleComplete(id);
       });
+      await nextTick();
 
-      // Simulate page reload
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert
       modules.forEach(({ id }) => {
@@ -224,7 +232,7 @@ describe('Progress Tracking Integration', () => {
       expect(progressStore.quizScores[moduleId]).toBe(retakeScore);
     });
 
-    it('should persist updated score after retake', () => {
+    it('should persist updated score after retake', async () => {
       // Arrange
       const moduleId = 'logistic-regression';
       const firstScore = 65;
@@ -235,10 +243,11 @@ describe('Progress Tracking Integration', () => {
 
       // Act - Retake
       progressStore.saveQuizScore(moduleId, retakeScore);
+      await nextTick();
 
-      // Simulate page reload
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert
       expect(newStore.getQuizScore(moduleId)).toBe(retakeScore);
@@ -296,27 +305,28 @@ describe('Progress Tracking Integration', () => {
       expect(progressStore.getQuizScore(moduleId)).toBe(scores[scores.length - 1]);
     });
 
-    it('should persist retake updates correctly', () => {
+    it('should persist retake updates correctly', async () => {
       // Arrange
       const moduleId = 'feature-scaling';
       const scores = [60, 75, 90];
 
       // Act - Multiple attempts with persistence checks
-      scores.forEach((score, index) => {
+      for (const score of scores) {
         progressStore.saveQuizScore(moduleId, score);
-        
-        // Simulate page reload after each attempt
-        const newStore = useProgressStore();
-        newStore.loadFromStorage();
-        
+        await nextTick();
+
+        // Simulate page reload after each attempt with a fresh Pinia instance
+        createTestPinia();
+        progressStore = useProgressStore();
+
         // Assert - Should have the current score
-        expect(newStore.getQuizScore(moduleId)).toBe(score);
-      });
+        expect(progressStore.getQuizScore(moduleId)).toBe(score);
+      }
     });
   });
 
   describe('Integration: Complete Quiz Flow', () => {
-    it('should handle complete quiz flow with persistence', () => {
+    it('should handle complete quiz flow with persistence', async () => {
       // Arrange
       const moduleId = 'linear-regression';
       const score = 85;
@@ -324,10 +334,11 @@ describe('Progress Tracking Integration', () => {
       // Act - Complete quiz
       progressStore.saveQuizScore(moduleId, score);
       progressStore.markModuleComplete(moduleId);
+      await nextTick();
 
-      // Simulate page reload
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert - All data persisted
       expect(newStore.getQuizScore(moduleId)).toBe(score);

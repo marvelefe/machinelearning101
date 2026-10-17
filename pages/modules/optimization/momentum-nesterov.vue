@@ -4,7 +4,7 @@
     difficulty="intermediate" :estimated-time="35" :table-of-contents="tableOfContents"
     module-id="momentum-nesterov"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }">
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }">
     <!-- Content Section -->
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />
@@ -82,6 +82,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useModuleStore } from '~/stores/module';
 import { useTableOfContents } from '~/composables/useTableOfContents';
 import { Momentum } from '~/algorithms/optimization/Momentum';
+import type { MomentumType } from '~/algorithms/optimization/Momentum';
 import type { ControlConfig } from '~/components/modules/ControlPanel.vue';
 import type { LineSeries } from '~/components/visualizations/LineChart.vue';
 import type { QuizResult } from '~/types/quiz';
@@ -104,7 +105,7 @@ const moduleStore = useModuleStore();
 
 // Parameters
 const parameters = ref({
-  momentumType: 'standard',
+  momentumType: 'standard' as MomentumType,
   lossFunction: 'quadratic-bowl',
   learningRate: 0.01,
   momentum: 0.9,
@@ -314,7 +315,7 @@ const handleParameterChange = (id: string, value: any) => {
  */
 const handleReset = () => {
   parameters.value = {
-    momentumType: 'standard',
+    momentumType: 'standard' as MomentumType,
     lossFunction: 'quadratic-bowl',
     learningRate: 0.01,
     momentum: 0.9,

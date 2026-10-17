@@ -623,7 +623,7 @@ export class SVM extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.alphas = [];
     this.b = 0;

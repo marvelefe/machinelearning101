@@ -553,7 +553,7 @@ export class MultiArmedBandits extends BaseAlgorithm {
   /**
    * Reset the algorithm
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.armStats = Array.from({ length: this.numArms }, (_, i) => ({
       armIndex: i,

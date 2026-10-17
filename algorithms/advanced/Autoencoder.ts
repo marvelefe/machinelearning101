@@ -28,7 +28,7 @@ export interface EncoderDecoderState {
   reconstructions: number[][];
 }
 
-export class Autoencoder extends BaseAlgorithm {
+export class Autoencoder extends BaseAlgorithm<number[][], number[], number[][]> {
   name = 'Autoencoder';
   
   // Network architecture
@@ -561,7 +561,7 @@ export class Autoencoder extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.encoderWeights = [];
     this.decoderWeights = [];

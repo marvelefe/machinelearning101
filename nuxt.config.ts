@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
+
+const rootDir = fileURLToPath(new URL(".", import.meta.url));
+
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
@@ -60,18 +65,30 @@ export default defineNuxtConfig({
   typescript: {
     strict: false,
     typeCheck: false,
+    tsConfig: {
+      // `worker/` is a separate Cloudflare Worker sub-project with its own
+      // tsconfig.json, runtime types (@cloudflare/workers-types) and deps
+      // (hono, jose). The Nuxt app's type-check must not pull it in.
+      exclude: ["../worker"],
+    },
   },
 
-  // Path aliases (Nuxt provides these by default, but explicitly defining for clarity)
+  // Path aliases.
+  //
+  // Nuxt provides `~`, `@`, `~~` and `@@` by default, but they are declared
+  // explicitly here so the intent is clear. Values MUST be absolute: Nuxt writes
+  // these verbatim into the generated `.nuxt/tsconfig.*.json` files, which live
+  // inside `.nuxt/`, so relative values (e.g. "." or "./algorithms") resolve to
+  // the wrong directory and break `npm run type-check`.
   alias: {
-    "@": ".",
-    "~": ".",
-    algorithms: "./algorithms",
-    components: "./components",
-    composables: "./composables",
-    stores: "./stores",
-    types: "./types",
-    utils: "./utils",
+    "@": rootDir,
+    "~": rootDir,
+    algorithms: resolve(rootDir, "algorithms"),
+    components: resolve(rootDir, "components"),
+    composables: resolve(rootDir, "composables"),
+    stores: resolve(rootDir, "stores"),
+    types: resolve(rootDir, "types"),
+    utils: resolve(rootDir, "utils"),
   },
 
     content: {

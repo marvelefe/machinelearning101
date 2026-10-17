@@ -8,7 +8,7 @@ export interface Scatter3DSeries {
   z: number[];
   name?: string;
   color?: string;
-  mode?: 'markers' | 'lines' | 'lines+markers';
+  mode?: 'markers' | 'lines' | 'lines+markers' | 'markers+text';
   marker?: {
     size?: number;
     symbol?: string;
@@ -25,7 +25,7 @@ export interface Surface3DData {
 }
 
 interface Props {
-  type: 'scatter' | 'surface';
+  type?: 'scatter' | 'surface';
   scatterSeries?: Scatter3DSeries[];
   surfaceData?: Surface3DData;
   title?: string;

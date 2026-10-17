@@ -631,7 +631,7 @@ export class NamedEntityRecognition extends BaseAlgorithm {
   /**
    * Reset NER state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.trainingTexts = [];
     this.trainingEntities = [];

@@ -418,7 +418,7 @@ export class PCA extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.components = [];
     this.explainedVariance = [];

@@ -27,7 +27,7 @@ export class TSNE extends BaseAlgorithm {
   
   // Training data
   private X_train: number[][] = [];
-  private iterationHistory: number[][] = []; // Store embeddings at different iterations
+  private iterationHistory: number[][][] = []; // Store embeddings at different iterations
   
   // Hyperparameters
   private nComponents: number;
@@ -452,7 +452,7 @@ export class TSNE extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.Y = [];
     this.P = [];

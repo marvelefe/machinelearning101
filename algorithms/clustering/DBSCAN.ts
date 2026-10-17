@@ -496,7 +496,7 @@ export class DBSCAN extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.clusters = [];
     this.assignments = [];

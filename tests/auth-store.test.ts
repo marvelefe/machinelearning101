@@ -1,14 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { setActivePinia, createPinia } from 'pinia';
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import { nextTick } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import type { User } from '~/stores/auth';
+import { createTestPinia } from './helpers/pinia';
 
 describe('Auth Store', () => {
   beforeEach(() => {
-    const pinia = createPinia();
-    pinia.use(piniaPluginPersistedstate);
-    setActivePinia(pinia);
+    createTestPinia();
     // Clear localStorage before each test
     localStorage.clear();
   });
@@ -153,7 +151,7 @@ describe('Auth Store', () => {
   });
 
   describe('Persistence', () => {
-    it('should save to localStorage when setting user', () => {
+    it('should save to localStorage when setting user', async () => {
       const store = useAuthStore();
       const user: User = {
         id: '123',
@@ -163,6 +161,8 @@ describe('Auth Store', () => {
       };
       
       store.setUser(user);
+      // Persistence is async (pinia-plugin-persistedstate writes via $subscribe)
+      await nextTick();
       
       const stored = localStorage.getItem('ml-platform-auth');
       expect(stored).toBeTruthy();
@@ -172,11 +172,13 @@ describe('Auth Store', () => {
       expect(data.isAuthenticated).toBe(true);
     });
 
-    it('should save to localStorage when setting token', () => {
+    it('should save to localStorage when setting token', async () => {
       const store = useAuthStore();
       const token = 'jwt-token-123';
       
       store.setToken(token);
+      // Persistence is async (pinia-plugin-persistedstate writes via $subscribe)
+      await nextTick();
       
       const stored = localStorage.getItem('ml-platform-auth');
       expect(stored).toBeTruthy();
@@ -201,9 +203,7 @@ describe('Auth Store', () => {
       }));
       
       // Create a new store instance which will automatically load from localStorage
-      const pinia = createPinia();
-      pinia.use(piniaPluginPersistedstate);
-      setActivePinia(pinia);
+      createTestPinia();
       const store = useAuthStore();
       
       expect(store.user).toEqual(user);
@@ -211,7 +211,7 @@ describe('Auth Store', () => {
       expect(store.isAuthenticated).toBe(true);
     });
 
-    it('should clear localStorage on clearAuth', () => {
+    it('should clear localStorage on clearAuth', async () => {
       const store = useAuthStore();
       const user: User = {
         id: '123',
@@ -222,25 +222,24 @@ describe('Auth Store', () => {
       
       store.setUser(user);
       // Wait for persistence to complete
+      await nextTick();
       expect(localStorage.getItem('ml-platform-auth')).toBeTruthy();
       
       store.clearAuth();
       // After clearing, the persisted state should reflect the cleared state
+      await nextTick();
       const stored = localStorage.getItem('ml-platform-auth');
-      if (stored) {
-        const data = JSON.parse(stored);
-        expect(data.user).toBeNull();
-        expect(data.token).toBeNull();
-      }
+      expect(stored).toBeTruthy();
+      const data = JSON.parse(stored!);
+      expect(data.user).toBeNull();
+      expect(data.token).toBeNull();
     });
 
     it('should handle corrupted localStorage data', () => {
       localStorage.setItem('ml-platform-auth', 'invalid-json');
       
       // Create a new store instance which will try to load from localStorage
-      const pinia = createPinia();
-      pinia.use(piniaPluginPersistedstate);
-      setActivePinia(pinia);
+      createTestPinia();
       const store = useAuthStore();
       
       // The store should have default values when localStorage is corrupted

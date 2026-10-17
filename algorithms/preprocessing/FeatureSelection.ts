@@ -374,7 +374,7 @@ export class FeatureSelection extends BaseAlgorithm {
   /**
    * Reset to initial state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.data = [];
     this.targetValues = [];

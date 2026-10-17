@@ -301,7 +301,7 @@ export class LassoRegression extends BaseAlgorithm {
     };
   }
   
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.weights = [];
     this.bias = 0;

@@ -4,7 +4,7 @@
     difficulty="advanced" :estimated-time="50" :table-of-contents="tableOfContents"
     module-id="gradient-boosting"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }">
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }">
     <!-- Content Section -->
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />

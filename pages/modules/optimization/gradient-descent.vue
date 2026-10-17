@@ -4,7 +4,7 @@
     difficulty="intermediate" :estimated-time="45" :table-of-contents="tableOfContents"
     module-id="gradient-descent"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }">
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }">
     <!-- Content Section -->
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />
@@ -206,7 +206,7 @@ const controls = computed<ControlConfig[]>(() => [
     step: 0.01,
     tooltip: 'Momentum coefficient (β)',
     group: 'Optimizer',
-  }] : []),
+  }] as ControlConfig[] : []),
   ...(parameters.value.optimizer === 'rmsprop' ? [{
     id: 'beta',
     type: 'slider',
@@ -216,7 +216,7 @@ const controls = computed<ControlConfig[]>(() => [
     step: 0.001,
     tooltip: 'Decay rate for squared gradient average',
     group: 'Optimizer',
-  }] : []),
+  }] as ControlConfig[] : []),
   ...(parameters.value.optimizer === 'adam' ? [
     {
       id: 'beta1',
@@ -238,7 +238,7 @@ const controls = computed<ControlConfig[]>(() => [
       tooltip: 'Decay rate for second moment',
       group: 'Optimizer',
     }
-  ] : []),
+  ] as ControlConfig[] : []),
   {
     id: 'startX',
     type: 'slider',

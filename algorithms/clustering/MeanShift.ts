@@ -627,7 +627,7 @@ export class MeanShift extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.modes = [];
     this.assignments = [];

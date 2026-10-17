@@ -594,7 +594,7 @@ export class TextGeneration extends BaseAlgorithm {
   /**
    * Reset text generation state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.charToIndex.clear();
     this.indexToChar.clear();

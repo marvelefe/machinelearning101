@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { setActivePinia, createPinia } from 'pinia';
+import { nextTick } from 'vue';
 import { useProgressStore } from '../stores/progress';
 import { useAnalyticsStore } from '../stores/analytics';
 import { useQuizLoader } from '../composables/useQuizLoader';
 import { transformQuizData } from '../utils/quiz-transform';
+import { createTestPinia } from './helpers/pinia';
 import type { Quiz as QuizType, QuizResult, QuizAnswer } from '../types/quiz';
 
 /**
@@ -115,7 +116,7 @@ describe('Quiz Integration Tests', () => {
 
   beforeEach(() => {
     // Create a fresh pinia instance for each test
-    setActivePinia(createPinia());
+    createTestPinia();
     progressStore = useProgressStore();
     analyticsStore = useAnalyticsStore();
     
@@ -442,7 +443,7 @@ describe('Quiz Integration Tests', () => {
      * Test persistence after retake
      * Requirements: 5.3
      */
-    it('should persist retake score to localStorage', () => {
+    it('should persist retake score to localStorage', async () => {
       // Arrange - First attempt
       const firstAttemptAnswers: Record<string, number> = {
         'q1': 2,
@@ -461,10 +462,11 @@ describe('Quiz Integration Tests', () => {
         retakeAnswers[question.id] = question.correctAnswer;
       });
       simulateQuizCompletion(mockQuiz, retakeAnswers);
+      await nextTick();
 
-      // Simulate page reload
+      // Simulate page reload with a fresh Pinia instance (rehydrates from localStorage)
+      createTestPinia();
       const newStore = useProgressStore();
-      newStore.loadFromStorage();
 
       // Assert - New score should be persisted
       expect(newStore.getQuizScore('test-module')).toBe(100);

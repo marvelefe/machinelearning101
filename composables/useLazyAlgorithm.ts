@@ -7,10 +7,7 @@
  * Requirements: 14.4, 14.8
  */
 
-import type { Algorithm } from '~/types/algorithm';
-
-type AlgorithmConstructor<T extends Algorithm = Algorithm> = new (...args: any[]) => T;
-
+type AlgorithmConstructor<T = unknown> = new (...args: any[]) => T;
 /**
  * Lazy load an algorithm by domain and name
  */
@@ -86,7 +83,7 @@ export function useLazyAlgorithm() {
     switch (name) {
       case 'GradientDescentOptimizer': {
         const module = await import('~/algorithms/optimization/GradientDescentOptimizer');
-        return module.GradientDescentOptimizer;
+        return (module as unknown as Record<string, AlgorithmConstructor>).GradientDescentOptimizer!;
       }
       case 'GradientDescentVisualization': {
         const module = await import('~/algorithms/optimization/GradientDescentVisualization');
@@ -94,7 +91,7 @@ export function useLazyAlgorithm() {
       }
       case 'LossLandscape': {
         const module = await import('~/algorithms/optimization/LossLandscape');
-        return module.LossLandscape;
+        return (module as unknown as Record<string, AlgorithmConstructor>).LossLandscape!;
       }
       default:
         throw new Error(`Unknown optimization algorithm: ${name}`);

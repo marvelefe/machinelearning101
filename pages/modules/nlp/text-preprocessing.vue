@@ -6,7 +6,7 @@
     module-id="text-preprocessing"
     :table-of-contents="tableOfContents"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }"
   >
     <!-- Content Section -->
     <template #content>
@@ -322,7 +322,6 @@ const handleProcess = async () => {
         name: 'Frequency',
         color: '#6366f1',
         width: 2,
-        labels: sortedTokens.map(([token]) => token),
       }];
     }
 

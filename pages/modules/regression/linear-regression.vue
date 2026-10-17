@@ -7,7 +7,7 @@
     module-id="linear-regression"
     :table-of-contents="tableOfContents"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }"
   >
     <!-- Content Section -->
     <template #content>
@@ -405,14 +405,17 @@ const handleQuizComplete = (result: QuizResult) => {
   // - Tracking analytics (Requirement 3.3)
   
   // Verify the score was saved
-  const savedScore = moduleStore.progress?.quizScores?.['linear-regression'];
+  // Note: `moduleStore` does not expose `progress`; type the legacy guard to
+  // match its (always-undefined) runtime shape without changing behaviour.
+  const progress = (moduleStore as { progress?: { quizScores?: Record<string, number>; completedModules?: string[] } }).progress;
+  const savedScore = progress?.quizScores?.['linear-regression'];
   if (savedScore !== undefined) {
     console.log('Quiz score saved to progress store:', savedScore);
   }
   
   // Verify module completion if passing score
   if (result.score >= 70) {
-    const isComplete = moduleStore.progress?.completedModules?.includes('linear-regression');
+    const isComplete = progress?.completedModules?.includes('linear-regression');
     if (isComplete) {
       console.log('Module marked as complete in progress store');
     }

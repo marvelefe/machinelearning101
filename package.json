@@ -1,7 +1,28 @@
 {
   "name": "machinelearning101",
+  "version": "1.0.0",
+  "description": "An interactive, browser-based machine learning learning platform for beginners — learn ML concepts through hands-on experimentation with zero setup required.",
   "type": "module",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://machinelearning101.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marvelefe/machinelearning101.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marvelefe/machinelearning101/issues"
+  },
+  "keywords": [
+    "machine-learning",
+    "education",
+    "interactive",
+    "nuxt",
+    "vue",
+    "typescript",
+    "data-science",
+    "visualization"
+  ],
   "scripts": {
     "build": "NODE_OPTIONS='--max-old-space-size=4168' nuxt build",
     "dev": "nuxt dev",

@@ -2,7 +2,7 @@
   <ModuleLayout title="Attention Mechanisms"
     description="Learn how attention allows models to focus on relevant parts of input sequences" difficulty="advanced"
     :estimated-time="55" module-id="attention-mechanisms" :table-of-contents="tableOfContents" :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }">
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }">
     <!-- Content Section -->
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />

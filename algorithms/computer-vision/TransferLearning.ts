@@ -59,7 +59,7 @@ export class TransferLearning extends BaseAlgorithm {
   private freezeFeatures: boolean;
   
   // Training history
-  protected trainingHistory = {
+  protected override trainingHistory = {
     epochs: [] as number[],
     loss: [] as number[],
     accuracy: [] as number[],
@@ -568,7 +568,7 @@ export class TransferLearning extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.featureExtractor = null;
     this.classifier = null;

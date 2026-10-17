@@ -492,7 +492,7 @@ export class LearningRateScheduler extends BaseAlgorithm {
   /**
    * Reset the optimizer
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.params = [this.config.startX, this.config.startY];
     this.history = [];

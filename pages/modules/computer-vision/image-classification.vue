@@ -4,7 +4,7 @@
     difficulty="beginner" :estimated-time="40" module-id="image-classification"
     :table-of-contents="tableOfContents"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }"
   >
     <!-- Content Section -->
     <template #content>

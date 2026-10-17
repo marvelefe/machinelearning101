@@ -215,7 +215,7 @@ export function useModules() {
     const results = await Promise.all(configPromises);
     
     // Filter out null results
-    return results.filter((module): module is ModuleMetadata => module !== null);
+    return results.filter((module): module is NonNullable<typeof module> => module !== null);
   };
 
   /**

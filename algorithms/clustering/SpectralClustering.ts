@@ -685,7 +685,7 @@ export class SpectralClustering extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.assignments = [];
     this.embedding = [];

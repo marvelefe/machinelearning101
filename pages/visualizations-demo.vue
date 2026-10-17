@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { LineSeries } from '~/components/visualizations/LineChart.vue';
 
 // Sample data for Scatter2D
 const scatterSeries = ref([
@@ -18,7 +19,7 @@ const scatterSeries = ref([
 ]);
 
 // Sample data for LineChart
-const lineSeries = ref([
+const lineSeries = ref<LineSeries[]>([
   {
     x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     y: [10, 8, 6, 5, 4, 3, 2.5, 2, 1.8, 1.5, 1.2],

@@ -2,6 +2,8 @@
  * Core algorithm types and interfaces for ML learning platform
  */
 
+import type { VisualizationType } from './visualization';
+
 /**
  * Re-export DataPoint from dataset types for convenience
  */
@@ -11,7 +13,7 @@ export type { DataPoint } from './dataset';
  * Visualization data structure for rendering charts and plots
  */
 export interface VisualizationData {
-  type: 'scatter2d' | 'scatter3d' | 'line' | 'heatmap' | 'contour' | 'surface' | 'network' | 'tree' | 'confusion-matrix' | 'roc-curve' | 'loss-landscape';
+  type: VisualizationType;
   title?: string;
   data: any;
   layout?: any;
@@ -65,6 +67,7 @@ export interface AlgorithmResults {
   metrics?: Metrics;
   visualizationData?: VisualizationData | VisualizationData[];
   trainingHistory?: TrainingHistory;
+  executionTime?: number;
 }
 
 /**
@@ -81,7 +84,11 @@ export interface ModelParameters {
 /**
  * Base interface that all ML algorithms must implement
  */
-export interface Algorithm {
+export interface Algorithm<
+  TX = number[][],
+  TY = number[],
+  TResult = number[] | string[]
+> {
   /**
    * Algorithm name
    */
@@ -93,14 +100,14 @@ export interface Algorithm {
    * @param y - Target values (optional for unsupervised learning)
    * @returns Promise that resolves when training is complete
    */
-  fit(X: number[][], y?: number[]): Promise<void>;
+  fit(X: TX, y?: TY): Promise<void>;
   
   /**
    * Make predictions on new data
    * @param X - Feature matrix (n_samples x n_features)
    * @returns Predicted values
    */
-  predict(X: number[][]): number[] | string[];
+  predict(X: TX): TResult;
   
   /**
    * Get visualization data for rendering
@@ -123,10 +130,14 @@ export interface Algorithm {
 /**
  * Abstract base class providing common functionality for algorithms
  */
-export abstract class BaseAlgorithm implements Algorithm {
+export abstract class BaseAlgorithm<
+  TX = number[][],
+  TY = number[],
+  TResult = number[] | string[]
+> implements Algorithm<TX, TY, TResult> {
   abstract name: string;
   
-  protected trained: boolean = false;
+  trained: boolean = false;
   protected trainingHistory: TrainingHistory = {
     epochs: [],
     loss: []
@@ -217,8 +228,8 @@ export abstract class BaseAlgorithm implements Algorithm {
     }
   }
   
-  abstract fit(X: number[][], y?: number[]): Promise<void>;
-  abstract predict(X: number[][]): number[] | string[];
+  abstract fit(X: TX, y?: TY): Promise<void>;
+  abstract predict(X: TX): TResult;
   abstract getVisualizationData(): VisualizationData | VisualizationData[];
   abstract getMetrics(): Metrics;
   

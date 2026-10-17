@@ -239,6 +239,8 @@ async function loadAlgorithmClass(algorithmName: string): Promise<any> {
   
   // Return a mock algorithm class that simulates the heavy computation
   return class MockAlgorithm {
+    params: any;
+
     constructor(params: any = {}) {
       this.params = params;
     }

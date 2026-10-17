@@ -29,6 +29,15 @@ export interface ScatterSeries {
     size?: number;
     symbol?: string;
     opacity?: number;
+    line?: {
+      color?: string;
+      width?: number;
+    };
+  };
+  line?: {
+    color?: string;
+    width?: number;
+    dash?: 'solid' | 'dot' | 'dash' | 'dashdot';
   };
   hovertemplate?: string;
 }

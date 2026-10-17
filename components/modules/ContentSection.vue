@@ -66,7 +66,7 @@ interface ImageData {
 }
 
 interface Props {
-  title: string;
+  title?: string;
   markdownContent?: string;
   collapsible?: boolean;
   defaultCollapsed?: boolean;

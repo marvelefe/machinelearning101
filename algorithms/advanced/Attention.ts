@@ -17,7 +17,7 @@ export interface AttentionParams {
   numHeads: number;
   attentionType: 'self' | 'cross' | 'multi-head';
   temperature: number;
-  dropout: number;
+  dropout?: number;
 }
 
 export interface AttentionWeights {
@@ -34,7 +34,7 @@ export interface MultiHeadAttention {
   projected: number[][];
 }
 
-export class Attention extends BaseAlgorithm {
+export class Attention extends BaseAlgorithm<number[][][], number[][], number[][][]> {
   name = 'Attention Mechanisms';
   
   // Model parameters
@@ -43,7 +43,7 @@ export class Attention extends BaseAlgorithm {
   private numHeads: number;
   private attentionType: 'self' | 'cross' | 'multi-head';
   private temperature: number;
-  private dropout: number;
+  private dropout?: number;
   
   // Learned parameters
   private queryWeights: number[][];
@@ -609,7 +609,7 @@ export class Attention extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.queryWeights = [];
     this.keyWeights = [];

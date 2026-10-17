@@ -311,7 +311,7 @@ export class RandomForest extends BaseAlgorithm {
   private classes: number[] = [];
   
   // Training history
-  protected trainingHistory: TrainingHistory & { 
+  protected override trainingHistory: TrainingHistory & { 
     oobScore: number[];
     featureImportances: number[][];
   } = {
@@ -744,7 +744,7 @@ export class RandomForest extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.trees = [];
     this.X_train = [];

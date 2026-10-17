@@ -7,7 +7,7 @@
 export const useModuleContent = async (domain: string, moduleId: string) => {
   const { data: content } = await useAsyncData(
     `${domain}-${moduleId}-content`,
-    () => queryContent(`modules/${domain}/${moduleId}/content`).findOne()
+    () => queryCollection('content').path(`/modules/${domain}/${moduleId}/content`).first()
   );
 
   return {

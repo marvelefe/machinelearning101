@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { transformQuizData, safeTransformQuizData, QuizValidationError } from '../utils/quiz-transform';
 import type { Quiz } from '../types/quiz';
 

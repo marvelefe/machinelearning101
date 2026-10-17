@@ -511,7 +511,7 @@ export class QLearning extends BaseAlgorithm {
   /**
    * Reset the algorithm
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.qTable.clear();
     this.episodeHistory = [];

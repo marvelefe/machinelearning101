@@ -489,7 +489,7 @@ export class Momentum extends BaseAlgorithm {
   /**
    * Reset the optimizer
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.params = [this.config.startX, this.config.startY];
     this.velocity = [0, 0];

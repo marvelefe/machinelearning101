@@ -53,7 +53,7 @@ export class GMM extends BaseAlgorithm {
   
   // Training history
   private emHistory: EMHistory[] = [];
-  protected trainingHistory: TrainingHistory & { logLikelihood: number[] } = {
+  protected override trainingHistory: TrainingHistory & { logLikelihood: number[] } = {
     epochs: [],
     loss: [],
     logLikelihood: []
@@ -726,7 +726,7 @@ export class GMM extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.components = [];
     this.responsibilities = [];

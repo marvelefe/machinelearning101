@@ -2,7 +2,7 @@
   <ModuleLayout title="DBSCAN"
     description="Learn density-based clustering that finds arbitrarily shaped clusters and identifies outliers"
     difficulty="intermediate" :estimated-time="40" module-id="dbscan" :table-of-contents="tableOfContents"
-    :parameters="parameters" @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }">
+    :parameters="parameters" @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }">
 
     <!-- Content Section -->
     <template #content>

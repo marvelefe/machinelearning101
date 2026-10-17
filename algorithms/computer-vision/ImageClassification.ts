@@ -44,7 +44,7 @@ export class ImageClassification extends BaseAlgorithm {
   private regularization: number;
   
   // Training history
-  protected trainingHistory = {
+  protected override trainingHistory = {
     epochs: [] as number[],
     loss: [] as number[],
     accuracy: [] as number[]
@@ -526,7 +526,7 @@ export class ImageClassification extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.weightsInputHidden = [];
     this.weightsHiddenOutput = [];

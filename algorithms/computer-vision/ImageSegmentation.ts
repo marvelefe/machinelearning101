@@ -563,7 +563,7 @@ export class ImageSegmentation extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.clusterCenters = [];
     this.X_train = [];

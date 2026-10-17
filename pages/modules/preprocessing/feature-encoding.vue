@@ -2,7 +2,7 @@
   <ModuleLayout module-id="feature-encoding" title="Feature Encoding" domain="preprocessing" difficulty="intermediate"
     :table-of-contents="tableOfContents"
     :parameters="params"
-    @load-bookmark="(val) => { params = val; handleLoadBookmark(val); }">
+    @load-bookmark="(val) => { params = val as typeof params; handleLoadBookmark(val); }">
     <template #content>
       <ContentRenderer v-if="content" :value="content" class="prose prose-slate max-w-none" />
     </template>
@@ -332,7 +332,7 @@ const calculateSparsity = () => {
 
 // Event handlers
 const handleParamChange = (key: string, value: any) => {
-  params.value[key as keyof typeof params.value] = value;
+  (params.value as Record<string, any>)[key] = value;
 };
 
 const resetModule = () => {

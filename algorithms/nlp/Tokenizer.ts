@@ -413,7 +413,7 @@ export class Tokenizer extends BaseAlgorithm {
   /**
    * Reset tokenizer state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.inputText = '';
     this.tokens = [];

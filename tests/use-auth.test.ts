@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { setActivePinia, createPinia } from 'pinia';
 import { useAuth } from '~/composables/useAuth';
 import { useAuthStore } from '~/stores/auth';
 import { useProgressStore } from '~/stores/progress';
 import { useToastStore } from '~/stores/toast';
+import { createTestPinia } from './helpers/pinia';
 
 // Mock fetch
 global.fetch = vi.fn();
@@ -26,12 +26,12 @@ vi.mock('#app', () => ({
 }));
 
 // Make useRuntimeConfig available globally
-global.useRuntimeConfig = mockUseRuntimeConfig;
-global.navigateTo = mockNavigateTo;
+(globalThis as any).useRuntimeConfig = mockUseRuntimeConfig;
+(globalThis as any).navigateTo = mockNavigateTo;
 
 describe('useAuth Composable', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    createTestPinia();
     vi.clearAllMocks();
     localStorage.clear();
     (fetch as any).mockClear();

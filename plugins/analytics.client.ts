@@ -36,7 +36,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     // Get Plausible configuration from runtime config or use defaults
-    const plausibleDomain = config.public.plausibleDomain || '';
+    const plausibleDomain = (config.public.plausibleDomain as string | undefined) || '';
     const plausibleHost = config.public.plausibleHost || 'https://plausible.io';
 
     // Only load if domain is configured

@@ -7,7 +7,7 @@
     module-id="pca"
     :table-of-contents="tableOfContents"
     :parameters="parameters"
-    @load-bookmark="(val) => { parameters = val; handleLoadBookmark(val); }"
+    @load-bookmark="(val) => { parameters = val as typeof parameters; handleLoadBookmark(val); }"
   >
     <!-- Content Section -->
     <template #content>
@@ -389,7 +389,6 @@ const handleTrain = async () => {
             name: screeViz.data.scree.name || 'Explained Variance',
             color: screeViz.data.scree.line?.color || '#3b82f6',
             width: screeViz.data.scree.line?.width || 2,
-            markers: true
           });
         }
         
@@ -401,7 +400,6 @@ const handleTrain = async () => {
             color: screeViz.data.cumulative.line?.color || '#10b981',
             width: screeViz.data.cumulative.line?.width || 2,
             dash: 'dash',
-            markers: true
           });
         }
         

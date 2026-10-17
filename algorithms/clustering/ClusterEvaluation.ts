@@ -807,7 +807,7 @@ export class ClusterEvaluation extends BaseAlgorithm {
   /**
    * Reset the model
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.evaluationResults = null;
     this.clusteringResult = null;

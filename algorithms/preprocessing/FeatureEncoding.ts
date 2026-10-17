@@ -113,7 +113,7 @@ export class FeatureEncoding extends BaseAlgorithm {
         const key = `${j}_${String(value)}`;
         const encodedIndex = this.encodingMap.get(key);
         if (encodedIndex !== undefined) {
-          encodedRow[encodedIndex] = 1;
+          encodedRow[encodedIndex as number] = 1;
         }
       });
       
@@ -423,7 +423,7 @@ export class FeatureEncoding extends BaseAlgorithm {
   /**
    * Reset to initial state
    */
-  reset(): void {
+  override reset(): void {
     super.reset();
     this.data = [];
     this.encodedData = [];
