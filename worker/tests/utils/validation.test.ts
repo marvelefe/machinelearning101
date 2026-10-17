@@ -125,6 +125,13 @@ describe('isValidEmail', () => {
 describe('isValidModuleId', () => {
   it('should validate correct module IDs', () => {
     const validIds = [
+      // Bare module IDs — this is what the app actually sends
+      // (e.g. `loadQuiz('decision-trees', ...)`, config.json "id")
+      'linear-regression',
+      'k-means',
+      'attention-mechanisms',
+      'decision-trees',
+      // Nested domain/module form
       'regression/linear-regression',
       'clustering/k-means',
       'preprocessing/feature-scaling',
@@ -140,7 +147,12 @@ describe('isValidModuleId', () => {
   it('should reject invalid module IDs', () => {
     const invalidIds = [
       '',
-      'invalid',
+      // Bare IDs are valid, but these bare forms are not kebab-case:
+      'Invalid',
+      'has_underscore',
+      'double--hyphen',
+      '-leading-hyphen',
+      'trailing-hyphen-',
       'Invalid/Module',
       'module/with spaces',
       'module/with_underscore',
@@ -176,14 +188,15 @@ describe('validateProgressData', () => {
     const validData = {
       modules: [
         {
-          module_id: 'regression/linear-regression',
+          // Bare module ID — the shape the app actually sends
+          module_id: 'linear-regression',
           completed: true,
           completed_at: Date.now()
         }
       ],
       quizzes: [
         {
-          module_id: 'regression/linear-regression',
+          module_id: 'decision-trees',
           score: 8,
           total: 10,
           completed_at: Date.now()
@@ -220,7 +233,8 @@ describe('validateProgressData', () => {
     const invalidData = {
       modules: [
         {
-          module_id: 'invalid-id',
+          // Spaces are not valid in module IDs
+          module_id: 'invalid id',
           completed: true,
           completed_at: Date.now()
         }
@@ -272,7 +286,8 @@ describe('validateProgressData', () => {
       quizzes: [],
       bookmarks: [
         {
-          module_id: 'invalid-id',
+          // Spaces are not valid in module IDs
+          module_id: 'invalid id',
           created_at: Date.now()
         }
       ]

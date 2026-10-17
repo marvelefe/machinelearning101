@@ -10,7 +10,7 @@ import type { Env } from "../../src/types";
 
 describe("CORS Middleware", () => {
   const mockEnv: Env = {
-    DB: {} as D1Database,
+    ml_platform_db: {} as D1Database,
     GOOGLE_CLIENT_ID: "test-client-id",
     GOOGLE_CLIENT_SECRET: "test-client-secret",
     GOOGLE_REDIRECT_URI: "http://localhost/callback",
@@ -27,8 +27,8 @@ describe("CORS Middleware", () => {
 
       expect(headers).toEqual({
         "Access-Control-Allow-Origin": "https://example.com",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept, Origin",
         "Access-Control-Max-Age": "86400",
       });
     });
@@ -41,8 +41,8 @@ describe("CORS Middleware", () => {
 
       expect(headers).toEqual({
         "Access-Control-Allow-Origin": "https://example.com",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept, Origin",
         "Access-Control-Max-Age": "86400",
       });
     });
@@ -77,8 +77,8 @@ describe("CORS Middleware", () => {
 
       expect(res.status).toBe(204);
       expect(res.headers.get("Access-Control-Allow-Origin")).toBe("https://example.com");
-      expect(res.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, OPTIONS");
-      expect(res.headers.get("Access-Control-Allow-Headers")).toBe("Content-Type, Authorization");
+      expect(res.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, PUT, DELETE, PATCH, OPTIONS");
+      expect(res.headers.get("Access-Control-Allow-Headers")).toBe("Content-Type, Authorization, X-Requested-With, Accept, Origin");
       expect(res.headers.get("Access-Control-Max-Age")).toBe("86400");
     });
 
@@ -98,8 +98,8 @@ describe("CORS Middleware", () => {
 
       expect(res.status).toBe(200);
       expect(res.headers.get("Access-Control-Allow-Origin")).toBe("https://example.com");
-      expect(res.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, OPTIONS");
-      expect(res.headers.get("Access-Control-Allow-Headers")).toBe("Content-Type, Authorization");
+      expect(res.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, PUT, DELETE, PATCH, OPTIONS");
+      expect(res.headers.get("Access-Control-Allow-Headers")).toBe("Content-Type, Authorization, X-Requested-With, Accept, Origin");
       expect(res.headers.get("Access-Control-Max-Age")).toBe("86400");
     });
 
@@ -154,7 +154,7 @@ describe("CORS Middleware", () => {
 
       expect(res.status).toBe(200);
       expect(res.headers.get("Access-Control-Allow-Origin")).toBe("https://example.com");
-      expect(res.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, OPTIONS");
+      expect(res.headers.get("Access-Control-Allow-Methods")).toBe("GET, POST, PUT, DELETE, PATCH, OPTIONS");
     });
 
     it("should handle preflight for POST requests with Authorization header", async () => {

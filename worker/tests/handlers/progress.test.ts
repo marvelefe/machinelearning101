@@ -8,7 +8,7 @@ import { handleSyncProgress, handleGetProgress } from '../../src/handlers/progre
 import * as authMiddleware from '../../src/middleware/auth'
 import * as database from '../../src/services/database'
 import * as validation from '../../src/utils/validation'
-import type { Env, SyncProgressRequest, Progress, QuizScore, Bookmark } from '../../src/types'
+import type { Env, SyncProgressRequest, Progress, QuizScore, BookmarkWithParams } from '../../src/types'
 
 // Mock dependencies
 vi.mock('../../src/middleware/auth')
@@ -456,12 +456,15 @@ describe('Progress Handlers', () => {
         }
       ]
       
-      const mockBookmarks: Bookmark[] = [
+      const mockBookmarks: BookmarkWithParams[] = [
         {
           id: 'bookmark-1',
           user_id: 'user-123',
           module_id: 'pca',
-          created_at: 1234567890
+          name: 'PCA Bookmark',
+          parameters: {},
+          created_at: 1234567890,
+          updated_at: 1234567890
         }
       ]
       

@@ -4,7 +4,11 @@
  */
 
 import type { User, Progress, QuizScore, Bookmark, BookmarkWithParams, Env } from '../types'
-import { ErrorCode } from '../types'
+import {
+  createDatabaseError,
+  createValidationError,
+  createNotFoundError,
+} from '../utils/errors'
 
 /**
  * Generate a unique ID using crypto
@@ -55,11 +59,7 @@ export async function createUser(
       updated_at: now,
     }
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to create user',
-      details: error,
-    }
+    throw createDatabaseError('Failed to create user', error)
   }
 }
 
@@ -79,11 +79,7 @@ export async function getUserByGoogleId(db: D1Database, googleId: string): Promi
     return result
   } catch (error) {
     console.error(error)
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to get user by Google ID',
-      details: error,
-    }
+    throw createDatabaseError('Failed to get user by Google ID', error)
   }
 }
 
@@ -102,11 +98,7 @@ export async function getUserById(db: D1Database, userId: string): Promise<User 
 
     return result
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to get user by ID',
-      details: error,
-    }
+    throw createDatabaseError('Failed to get user by ID', error)
   }
 }
 
@@ -157,10 +149,7 @@ export async function updateUser(
 
     const user = await getUserById(db, userId)
     if (!user) {
-      throw {
-        code: ErrorCode.NOT_FOUND,
-        message: 'User not found after update',
-      }
+      throw createNotFoundError('User not found after update')
     }
 
     return user
@@ -168,11 +157,7 @@ export async function updateUser(
     if ((error as any).code) {
       throw error
     }
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to update user',
-      details: error,
-    }
+    throw createDatabaseError('Failed to update user', error)
   }
 }
 
@@ -219,11 +204,7 @@ export async function saveProgress(
       completed_at: completedAt,
     }
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to save progress',
-      details: error,
-    }
+    throw createDatabaseError('Failed to save progress', error)
   }
 }
 
@@ -246,11 +227,7 @@ export async function getProgressByUserId(db: D1Database, userId: string): Promi
       completed: Boolean(p.completed),
     }))
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to get progress',
-      details: error,
-    }
+    throw createDatabaseError('Failed to get progress', error)
   }
 }
 
@@ -297,11 +274,7 @@ export async function saveQuizScore(
       completed_at: completedAt,
     }
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to save quiz score',
-      details: error,
-    }
+    throw createDatabaseError('Failed to save quiz score', error)
   }
 }
 
@@ -320,11 +293,7 @@ export async function getQuizScoresByUserId(db: D1Database, userId: string): Pro
 
     return result.results || []
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to get quiz scores',
-      details: error,
-    }
+    throw createDatabaseError('Failed to get quiz scores', error)
   }
 }
 
@@ -363,11 +332,7 @@ export async function saveBookmark(
     // Validate JSON size is under 10KB
     const jsonSize = new TextEncoder().encode(parametersJson).length
     if (jsonSize > 10240) {
-      throw {
-        code: ErrorCode.VALIDATION_ERROR,
-        message: 'Parameters exceed 10KB limit',
-        details: { size: jsonSize, limit: 10240 }
-      }
+      throw createValidationError('Parameters exceed 10KB limit', { size: jsonSize, limit: 10240 })
     }
 
     console.log("Initiating insert")
@@ -408,11 +373,7 @@ export async function saveBookmark(
     if ((error as any).code) {
       throw error
     }
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to save bookmark',
-      details: error,
-    }
+    throw createDatabaseError('Failed to save bookmark', error)
   }
 }
 
@@ -452,11 +413,7 @@ export async function updateBookmark(
       // Validate JSON size is under 10KB
       const jsonSize = new TextEncoder().encode(parametersJson).length
       if (jsonSize > 10240) {
-        throw {
-          code: ErrorCode.VALIDATION_ERROR,
-          message: 'Parameters exceed 10KB limit',
-          details: { size: jsonSize, limit: 10240 }
-        }
+        throw createValidationError('Parameters exceed 10KB limit', { size: jsonSize, limit: 10240 })
       }
       
       fields.push('parameters = ?')
@@ -483,10 +440,7 @@ export async function updateBookmark(
       .first<Bookmark>()
 
     if (!result) {
-      throw {
-        code: ErrorCode.NOT_FOUND,
-        message: 'Bookmark not found',
-      }
+      throw createNotFoundError('Bookmark not found')
     }
 
     return result
@@ -494,11 +448,7 @@ export async function updateBookmark(
     if ((error as any).code) {
       throw error
     }
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to update bookmark',
-      details: error,
-    }
+    throw createDatabaseError('Failed to update bookmark', error)
   }
 }
 
@@ -537,11 +487,7 @@ export async function getBookmarksByUserId(db: D1Database, userId: string): Prom
 
     return bookmarks
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to get bookmarks',
-      details: error,
-    }
+    throw createDatabaseError('Failed to get bookmarks', error)
   }
 }
 
@@ -566,10 +512,6 @@ export async function deleteBookmark(
 
     return (result.meta?.changes || 0) > 0
   } catch (error) {
-    throw {
-      code: ErrorCode.DATABASE_ERROR,
-      message: 'Failed to delete bookmark',
-      details: error,
-    }
+    throw createDatabaseError('Failed to delete bookmark', error)
   }
 }

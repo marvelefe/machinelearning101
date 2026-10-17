@@ -9,7 +9,7 @@ import type { Env } from '../src/index'
 
 // Mock environment
 const mockEnv: Env = {
-  DB: {} as D1Database,
+  ml_platform_db: {} as D1Database,
   GOOGLE_CLIENT_ID: 'test-client-id',
   GOOGLE_CLIENT_SECRET: 'test-client-secret',
   GOOGLE_REDIRECT_URI: 'https://api.test.com/api/auth/google/callback',
@@ -39,8 +39,8 @@ describe('Worker Entry Point', () => {
       const res = await app.fetch(req, mockEnv)
       
       expect(res.headers.get('Access-Control-Allow-Origin')).toBe('https://test.com')
-      expect(res.headers.get('Access-Control-Allow-Methods')).toBe('GET, POST, OPTIONS')
-      expect(res.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type, Authorization')
+      expect(res.headers.get('Access-Control-Allow-Methods')).toBe('GET, POST, PUT, DELETE, PATCH, OPTIONS')
+      expect(res.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type, Authorization, X-Requested-With, Accept, Origin')
     })
 
     it('should handle preflight OPTIONS requests', async () => {

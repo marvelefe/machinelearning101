@@ -74,7 +74,7 @@ describe('Auth Middleware', () => {
 
     beforeEach(() => {
       mockEnv = {
-        DB: {} as D1Database,
+        ml_platform_db: {} as D1Database,
         GOOGLE_CLIENT_ID: 'test-client-id',
         GOOGLE_CLIENT_SECRET: 'test-client-secret',
         GOOGLE_REDIRECT_URI: 'https://example.com/callback',

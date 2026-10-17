@@ -25,7 +25,7 @@ describe('OAuth Flow Integration', () => {
     }
     
     mockEnv = {
-      DB: mockDB as D1Database,
+      ml_platform_db: mockDB as D1Database,
       GOOGLE_CLIENT_ID: 'test-client-id.apps.googleusercontent.com',
       GOOGLE_CLIENT_SECRET: 'test-client-secret',
       GOOGLE_REDIRECT_URI: 'https://api.test.com/api/auth/google/callback',

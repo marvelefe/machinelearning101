@@ -30,7 +30,7 @@ describe('Progress Sync Integration', () => {
     }
     
     mockEnv = {
-      DB: mockDB as D1Database,
+      ml_platform_db: mockDB as D1Database,
       GOOGLE_CLIENT_ID: 'test-client-id',
       GOOGLE_CLIENT_SECRET: 'test-client-secret',
       GOOGLE_REDIRECT_URI: 'https://api.test.com/callback',
@@ -77,8 +77,12 @@ describe('Progress Sync Integration', () => {
       ],
       bookmarks: [
         {
+          id: 'bookmark-kmeans-1',
           module_id: 'clustering/k-means',
-          created_at: Date.now()
+          name: 'K-Means Bookmark',
+          parameters: { clusters: 3 },
+          created_at: Date.now(),
+          updated_at: Date.now()
         }
       ]
     }
@@ -96,7 +100,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(200)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('success', true)
     expect(data).toHaveProperty('synced_at')
     expect(typeof data.synced_at).toBe('number')
@@ -213,8 +217,12 @@ describe('Progress Sync Integration', () => {
       quizzes: [],
       bookmarks: [
         {
+          id: 'bookmark-kmeans-2',
           module_id: 'clustering/k-means',
-          created_at: newTimestamp
+          name: 'K-Means Bookmark',
+          parameters: { clusters: 3 },
+          created_at: newTimestamp,
+          updated_at: newTimestamp
         }
       ]
     }
@@ -244,11 +252,19 @@ describe('Progress Sync Integration', () => {
     )
     
     // Verify bookmark with newer timestamp
+    // saveBookmark binds: id, user_id, module_id, name, parameters,
+    // created_at, updated_at, then name, parameters, updated_at for the
+    // ON CONFLICT UPDATE clause.
     expect(mockDB.bind).toHaveBeenCalledWith(
-      expect.any(String),
+      'bookmark-kmeans-2',
       testUserId,
       'clustering/k-means',
+      'K-Means Bookmark',
+      JSON.stringify({ clusters: 3 }),
       newTimestamp,
+      newTimestamp,
+      'K-Means Bookmark',
+      JSON.stringify({ clusters: 3 }),
       newTimestamp
     )
   })
@@ -271,8 +287,12 @@ describe('Progress Sync Integration', () => {
         completed_at: Date.now() - i * 1000
       })),
       bookmarks: Array.from({ length: batchSize }, (_, i) => ({
+        id: `bookmark-${i}`,
         module_id: `domain/module-${i}`,
-        created_at: Date.now() - i * 2000
+        name: `Bookmark ${i}`,
+        parameters: { index: i },
+        created_at: Date.now() - i * 2000,
+        updated_at: Date.now() - i * 2000
       }))
     }
     
@@ -289,7 +309,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(200)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data.success).toBe(true)
     
     // Verify all items were processed
@@ -366,7 +386,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(200)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('modules')
     expect(data).toHaveProperty('quizzes')
     expect(data).toHaveProperty('bookmarks')
@@ -419,7 +439,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(400)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('code', 'VALIDATION_ERROR')
     expect(data.message).toContain('Invalid module_id')
   })
@@ -453,7 +473,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(400)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('code', 'VALIDATION_ERROR')
     expect(data.message).toContain('score')
   })
@@ -480,7 +500,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(401)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('code', 'UNAUTHORIZED')
   })
   
@@ -496,7 +516,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(401)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('code', 'UNAUTHORIZED')
   })
   
@@ -522,7 +542,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(200)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('success', true)
     expect(data).toHaveProperty('synced_at')
     
@@ -559,7 +579,7 @@ describe('Progress Sync Integration', () => {
     
     const failingEnv = {
       ...mockEnv,
-      DB: failingDB as D1Database
+      ml_platform_db: failingDB as unknown as D1Database
     }
     
     const request = new Request('https://api.test.com/api/progress/sync', {
@@ -575,7 +595,7 @@ describe('Progress Sync Integration', () => {
     
     expect(response.status).toBe(500)
     
-    const data = await response.json()
+    const data = (await response.json()) as Record<string, any>
     expect(data).toHaveProperty('code', 'DATABASE_ERROR')
     expect(data).toHaveProperty('message')
   })

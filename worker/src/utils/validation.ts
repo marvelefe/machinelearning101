@@ -102,40 +102,33 @@ export function isValidEmail(email: string): boolean {
 /**
  * Validates module ID format
  * Module IDs should follow the pattern: domain/module-name
- * Examples: regression/linear-regression, clustering/k-means
+ * Examples: linear-regression, attention-mechanisms, regression/linear-regression
  * Requirements: 7.4
  */
 export function isValidModuleId(moduleId: string): boolean {
   if (typeof moduleId !== 'string' || !moduleId) {
     return false
   }
-  
-  // Module ID pattern: domain/module-name (kebab-case)
-  const moduleIdRegex = /^[a-z]+(?:-[a-z0-9]+)*$/
-  
-  if (!moduleIdRegex.test(moduleId)) {
-    return false
-  }
-  
+
   // Length constraints
   if (moduleId.length > 100) {
     return false
   }
-  
-  // Ensure no consecutive hyphens or slashes
-  if (moduleId.includes('--') || moduleId.includes('//')) {
+
+  // A module ID is one or two kebab-case segments separated by "/".
+  //
+  // The app identifies modules by their bare ID (e.g. "linear-regression",
+  // "attention-mechanisms" — see `loadQuiz('decision-trees', ...)` and each
+  // module's config.json "id"), so a single segment is the common case. The
+  // nested "domain/module" form is also accepted.
+  const segmentRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+  const segments = moduleId.split('/')
+
+  if (segments.length > 2) {
     return false
   }
-  
-  // Ensure doesn't start or end with hyphen
-  const parts = moduleId.split('/')
-  for (const part of parts) {
-    if (part.startsWith('-') || part.endsWith('-')) {
-      return false
-    }
-  }
-  
-  return true
+
+  return segments.every((segment) => segmentRegex.test(segment))
 }
 
 /**

@@ -30,7 +30,7 @@ describe('Authentication Handlers', () => {
     vi.clearAllMocks()
     
     mockEnv = {
-      DB: {} as D1Database,
+      ml_platform_db: {} as D1Database,
       GOOGLE_CLIENT_ID: 'test-client-id',
       GOOGLE_CLIENT_SECRET: 'test-client-secret',
       GOOGLE_REDIRECT_URI: 'https://api.test.com/auth/callback',
@@ -150,8 +150,8 @@ describe('Authentication Handlers', () => {
         mockEnv.GOOGLE_REDIRECT_URI
       )
       expect(fetchUserProfile).toHaveBeenCalledWith(mockAccessToken)
-      expect(getUserByGoogleId).toHaveBeenCalledWith(mockenv.ml_platform_db, mockUserProfile.id)
-      expect(createUser).toHaveBeenCalledWith(mockenv.ml_platform_db, {
+      expect(getUserByGoogleId).toHaveBeenCalledWith(mockEnv.ml_platform_db, mockUserProfile.id)
+      expect(createUser).toHaveBeenCalledWith(mockEnv.ml_platform_db, {
         google_id: mockUserProfile.id,
         email: mockUserProfile.email,
         name: mockUserProfile.name,
@@ -224,7 +224,7 @@ describe('Authentication Handlers', () => {
       const response = await handleOAuthCallback(request, mockEnv)
       
       expect(response.status).toBe(302)
-      expect(updateUser).toHaveBeenCalledWith(mockenv.ml_platform_db, existingUser.id, {
+      expect(updateUser).toHaveBeenCalledWith(mockEnv.ml_platform_db, existingUser.id, {
         email: mockUserProfile.email,
         name: mockUserProfile.name,
         picture_url: mockUserProfile.picture
@@ -346,7 +346,7 @@ describe('Authentication Handlers', () => {
       })
       
       expect(authenticateRequest).toHaveBeenCalledWith(request, mockEnv)
-      expect(getUserById).toHaveBeenCalledWith(mockenv.ml_platform_db, mockUser.id)
+      expect(getUserById).toHaveBeenCalledWith(mockEnv.ml_platform_db, mockUser.id)
     })
     
     it('should handle user not found', async () => {
