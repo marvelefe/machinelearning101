@@ -705,10 +705,10 @@ const handleInput = (event: Event) => {
 
 ### Unit Testing
 
-Use Vitest for unit tests:
+Unit tests live in the root `tests/` directory, with one test file per algorithm. Use Vitest for unit tests:
 
 ```typescript
-// algorithms/__tests__/ExampleAlgorithm.test.ts
+// tests/example-algorithm.test.ts
 import { describe, it, expect } from 'vitest';
 import { ExampleAlgorithm } from '../ExampleAlgorithm';
 
